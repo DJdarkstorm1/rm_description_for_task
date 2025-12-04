@@ -16,5 +16,22 @@
     <!-- push robot_description to factory and spawn robot in gazebo -->
     <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" clear_params="true"
           args="-z 0.5 -param robot_description -urdf -model sentry" output="screen"/>
-
+          
+    <!--do some change to find tf tree-->
+  <!--  <node name="simple_chassis_controller" pkg="simple_chassis_controller" type="simple_chassis_controller" output="screen"/> -->
+  
+    <node pkg="rviz" name="rviz" type="rviz" args="-d $(find sentry_chassis_controller)/config/config.rviz"/>
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" 
+    	  type="robot_state_publisher" respawn="false" output="screen">
+    	  <param name="publish_frequency" type="double" value="30.0"/>
+    </node>
+    
+    <node name="joint_state_publisher" pkg="joint_state_publisher" 
+    	  type="joint_state_publisher">
+    	  <param name="use_gui" value="false"/>
+    </node>    
+    <node pkg="tf" type="static_transform_publisher" name="base_link_to_map"
+    	  args="0 0 0 0 0 0 map base_link 100"/>
+    
 </launch>
